@@ -1148,7 +1148,7 @@ GameObject:
   - component: {fileID: 2135738607}
   m_Layer: 0
   m_Name: Canon
-  m_TagString: Untagged
+  m_TagString: Canon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1258,7 +1258,7 @@ MonoBehaviour:
   canon: {fileID: 2135738602}
   posicionInicial: {fileID: 441278991}
   fuerzaBala: 1000
-  distanciaCambioColor: 5
+  distanciaCambioColor: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

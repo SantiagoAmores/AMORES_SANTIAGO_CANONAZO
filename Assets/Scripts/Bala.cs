@@ -12,9 +12,6 @@ public class Bala : MonoBehaviour
     // Añadir posición desde la que sale
     public Transform posicionInicial;
 
-    // Fuerza lanzamiento
-    public float fuerzaBala;
-
     // Distancia mínima para cambiar el color
     public float distanciaCambioColor = 5f;
 
