@@ -40,5 +40,7 @@ public class BotonBlanco : MonoBehaviour
             {
                 balaRenderer.material.color = colorAleatorio;
             }
+
+        GameManager.IncNumBalas();
     }
 }

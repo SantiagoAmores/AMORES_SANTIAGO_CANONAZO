@@ -15,5 +15,7 @@ public class BotonRojo : MonoBehaviour
         {
             Destroy(bala);
         }
+
+        GameManager.ResetearBalas();
     }
 }
