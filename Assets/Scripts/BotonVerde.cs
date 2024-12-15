@@ -8,6 +8,7 @@ public class BotonVerde : MonoBehaviour
     public GameObject balaPrefab;
     public GameObject canon;
     public Transform posicionInicial;
+    public Transform cruceta;
     public float fuerzaBala;
     public Renderer canonRenderer;
 
@@ -48,25 +49,27 @@ public class BotonVerde : MonoBehaviour
     // Este método se llama automáticamente cuando se hace clic sobre el objeto.
     private void OnMouseDown ()
     {
-            if (posicionInicial != null && canon != null)
+        // Validar que todo esté asignado
+        if (posicionInicial != null && cruceta != null && balaPrefab != null)
+        {
+            // Instanciar la bala en la posición inicial (delante del cañón)
+            ultimaBalaDisparada = Instantiate(balaPrefab, posicionInicial.position, Quaternion.identity);
+
+            // Obtener el Rigidbody de la bala
+            Rigidbody rb = ultimaBalaDisparada.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                // Instanciar la bala en la posición del empty y con su rotación
-                ultimaBalaDisparada = Instantiate(balaPrefab, posicionInicial.position, posicionInicial.rotation);
+                // Calcular la dirección desde la posición inicial hacia la cruceta
+                Vector3 direccionDisparo = (cruceta.position - posicionInicial.position).normalized;
 
-                // Asegurar que la bala tenga el tag "Bala"
-                ultimaBalaDisparada.tag = "Bala";
-
-                // Añadir fuerza para que la bala salga disparada
-                Rigidbody rb = ultimaBalaDisparada.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.AddForce(posicionInicial.forward * fuerzaBala);
-
-                }
+                // Aplicar fuerza en la dirección calculada
+                rb.AddForce(direccionDisparo * fuerzaBala, ForceMode.Impulse);
             }
-
-            GameManager.IncNumBalas();
-
+        }
+        else
+        {
+            Debug.LogWarning("Asegúrate de asignar 'posicionInicial', 'cruceta' y 'balaPrefab' en el inspector.");
+        }
     }
 }
 
