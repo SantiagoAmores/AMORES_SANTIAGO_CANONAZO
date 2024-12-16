@@ -9,12 +9,46 @@ public class BotonBlanco : MonoBehaviour
     public GameObject canon;
     public Transform posicionInicial;
 
+    public Renderer canonRenderer;
+
+    // Distancia mínima para cambiar el color
+    public float distanciaCambioColor = 5f;
+
+    // Color original del cañón
+    private Color colorOriginal;
+
 
     // Este método se llama automáticamente cuando se hace clic sobre el objeto.
     private void OnMouseDown ()
     {
-            // Instanciar la bala en la posición inicial con su rotación
-            GameObject bala = Instantiate(balaPrefab, posicionInicial.position, posicionInicial.rotation);
+
+        // Verificar si existe una bala activa
+        bool existeBalaActiva = ultimaBalaDisparada != null;
+
+        if (existeBalaActiva)
+        {
+            // Calcular la distancia entre la bala y el cañón
+            float distancia = Vector3.Distance(ultimaBalaDisparada.transform.position, canon.transform.position);
+
+            if (distancia <= distanciaCambioColor)
+            {
+                // Cambiar el color del cañón a rojo
+                canonRenderer.material.color = Color.red;
+            }
+            else
+            {
+                // Restaurar el color original del cañón
+                canonRenderer.material.color = colorOriginal;
+            }
+        }
+        else
+        {
+            // Si no hay bala, asegurarse de que el cañón tenga su color original
+            canonRenderer.material.color = colorOriginal;
+        }
+
+        // Instanciar la bala en la posición inicial con su rotación
+        GameObject bala = Instantiate(balaPrefab, posicionInicial.position, posicionInicial.rotation);
 
             // Asegurar que la bala tenga el tag "Bala"
             bala.tag = "Bala";

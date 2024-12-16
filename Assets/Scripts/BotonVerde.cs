@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class BotonVerde : MonoBehaviour
 {
-    public GameObject ultimaBalaDisparada;
-    public GameObject balaPrefab;
-    public GameObject canon;
-    public Transform posicionInicial;
-    public Transform cruceta;
-    public float fuerzaBala;
-    public Renderer canonRenderer;
+    public GameObject ultimaBalaDisparada; // Última bala disparada
+    public GameObject balaPrefab;          // Prefab de la bala
+    public GameObject canon;               // Referencia al cañón
+    public Transform posicionInicial;      // Posición inicial de disparo (Empty delante del cañón)
+    public Transform cruceta;              // Cruceta hacia donde disparará
+    public float fuerzaBalaMin = 5f;       // Fuerza mínima de disparo
+    public float fuerzaBalaMax = 50f;      // Fuerza máxima de disparo
+    public float tiempoCargaMax = 2f;      // Tiempo máximo para cargar la potencia
+    public Renderer canonRenderer;         // Renderer del cañón para cambiar color
 
-    // Distancia mínima para cambiar el color
-    public float distanciaCambioColor = 5f;
-
-    // Color original del cañón
+    // Variables privadas
+    private float fuerzaActual;            // Fuerza de disparo actual
+    private float tiempoCargando;          // Tiempo que se ha mantenido presionado el botón
+    private bool cargando;                 // Flag para saber si está cargando la potencia
     private Color colorOriginal;
+
+    private void Start()
+    {
+        // Guardar el color original del cañón
+        if (canonRenderer != null)
+        {
+            colorOriginal = canonRenderer.material.color;
+        }
+    }
 
     private void Update()
     {
@@ -28,48 +39,65 @@ public class BotonVerde : MonoBehaviour
             // Calcular la distancia entre la bala y el cañón
             float distancia = Vector3.Distance(ultimaBalaDisparada.transform.position, canon.transform.position);
 
-            if (distancia <= distanciaCambioColor)
+            if (distancia <= 5f)
             {
                 // Cambiar el color del cañón a rojo
                 canonRenderer.material.color = Color.red;
             }
             else
             {
-                // Restaurar el color original del cañón
                 canonRenderer.material.color = colorOriginal;
             }
         }
         else
         {
-            // Si no hay bala, asegurarse de que el cañón tenga su color original
             canonRenderer.material.color = colorOriginal;
+        }
+
+        // Incrementar la carga si el botón está presionado
+        if (cargando)
+        {
+            tiempoCargando += Time.deltaTime;
+            // Calcular la fuerza actual según el tiempo cargado
+            fuerzaActual = Mathf.Lerp(fuerzaBalaMin, fuerzaBalaMax, tiempoCargando / tiempoCargaMax);
         }
     }
 
-    // Este método se llama automáticamente cuando se hace clic sobre el objeto.
-    private void OnMouseDown ()
+    private void OnMouseDown()
     {
+        // Comenzar a cargar la potencia
+        cargando = true;
+        tiempoCargando = 0f;
+        fuerzaActual = fuerzaBalaMin; // Empezar con la fuerza mínima
+    }
+
+    private void OnMouseUp()
+    {
+        // Dejar de cargar y disparar la bala
+        cargando = false;
+
         // Validar que todo esté asignado
-        if (posicionInicial != null && cruceta != null && balaPrefab != null)
+        if (posicionInicial != null && cruceta != null && balaPrefab != null && canon != null)
         {
-            // Instanciar la bala en la posición inicial (delante del cañón)
+            // Hacer que el cañón mire hacia la cruceta
+            canon.transform.LookAt(cruceta);
+
+            // Instanciar la bala en la posición inicial
             ultimaBalaDisparada = Instantiate(balaPrefab, posicionInicial.position, Quaternion.identity);
 
             // Obtener el Rigidbody de la bala
             Rigidbody rb = ultimaBalaDisparada.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                // Calcular la dirección desde la posición inicial hacia la cruceta
-                Vector3 direccionDisparo = (cruceta.position - posicionInicial.position).normalized;
-
-                // Aplicar fuerza en la dirección calculada
-                rb.AddForce(direccionDisparo * fuerzaBala, ForceMode.Impulse);
+                // Aplicar fuerza acumulada en la dirección del cañón
+                rb.AddForce(canon.transform.forward * fuerzaActual, ForceMode.Impulse);
             }
         }
-        else
-        {
-            Debug.LogWarning("Asegúrate de asignar 'posicionInicial', 'cruceta' y 'balaPrefab' en el inspector.");
-        }
+
+        // Incrementar el contador de balas
+        GameManager.IncNumBalas();
     }
 }
+
+
 
