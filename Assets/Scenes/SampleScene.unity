@@ -675,8 +675,8 @@ MonoBehaviour:
   posicionInicial: {fileID: 441278991}
   cruceta: {fileID: 1411886083}
   canonRenderer: {fileID: 2135738604}
-  fuerzaBalaMin: 5
-  fuerzaBalaMax: 50
+  fuerzaBalaMin: 1
+  fuerzaBalaMax: 100
   tiempoCargaMax: 2
   distanciaCambioColor: 5
 --- !u!1 &861011843
