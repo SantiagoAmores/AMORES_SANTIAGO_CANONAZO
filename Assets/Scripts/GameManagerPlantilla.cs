@@ -7,9 +7,10 @@ public class GameManager : MonoBehaviour
 {
     static public GameObject numBalasText;
     static public GameObject numDianasText;
-    static public GameObject fuerzaText;
+    static public GameObject numFuerzaText;
     static int numBalas = 0;
     static int numDianas = 0;
+    static int numFuerza = 0;
    
     void Start()
     {
@@ -27,6 +28,14 @@ public class GameManager : MonoBehaviour
         {
             TextMeshProUGUI textoTMP2 = numDianasText.GetComponent<TextMeshProUGUI>();
             textoTMP2.text = "Dianas: " + numDianas;
+        }
+
+        numFuerzaText = GameObject.Find("TextoFuerza");
+
+        if (numFuerzaText != null)
+        {
+            TextMeshProUGUI textoTMP2 = numFuerzaText.GetComponent<TextMeshProUGUI>();
+            textoTMP2.text = "Fuerza: " + numFuerza;
         }
     }
 
@@ -82,10 +91,10 @@ public class GameManager : MonoBehaviour
     static public void FuerzaBala(float potencia)
     {
         // Actualizar el texto de la potencia en el Canvas
-        if (fuerzaText != null)
+        if (numFuerzaText != null)
         {
-            TextMeshProUGUI textoTMP3 = fuerzaText.GetComponent<TextMeshProUGUI>();
-            textoTMP3.text = "Potencia: " + Mathf.RoundToInt(potencia);
+            TextMeshProUGUI textoTMP3 = numFuerzaText.GetComponent<TextMeshProUGUI>();
+            textoTMP3.text = "Fuerza: " + Mathf.RoundToInt(potencia);
         }
     }
 }

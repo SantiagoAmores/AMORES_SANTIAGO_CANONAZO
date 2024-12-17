@@ -66,10 +66,6 @@ public class Diana : MonoBehaviour
             // Instanciar una nueva diana en la posición seleccionada
             Instantiate(dianaPrefab, posicionSeleccionada.position, posicionSeleccionada.rotation);
         }
-        else
-        {
-            Debug.LogWarning("No se han asignado posiciones de reaparición o prefab de diana.");
-        }
     }
 }
 
