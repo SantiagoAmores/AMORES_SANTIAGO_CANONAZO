@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BotonVerde : MonoBehaviour
+public class BotonVerde : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public GameObject ultimaBalaDisparada; // Última bala disparada
     public GameObject balaPrefab;          // Prefab de la bala
@@ -73,25 +75,30 @@ public class BotonVerde : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    // Esta función se llama cuando el botón es presionado (comienza la carga)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        // Cambiar el color del cañón al iniciar la carga
-        if (canonRenderer != null)
+        if (!cargando)
         {
-            canonRenderer.material.color = Color.red;
+            // Cambiar el color del cañón al iniciar la carga
+            if (canonRenderer != null)
+            {
+                canonRenderer.material.color = Color.red;
+            }
+
+            // Comenzar la carga
+            cargando = true;
+            tiempoInicio = Time.time;
+            tiempoCargando = 0f;
+            fuerzaActual = fuerzaBalaMin;
+
+            // Actualizar la fuerza inicial en el Canvas
+            GameManager.FuerzaBala(fuerzaActual);
         }
-
-        // Iniciar la carga
-        cargando = true;
-        tiempoInicio = Time.time;
-        tiempoCargando = 0f;
-        fuerzaActual = fuerzaBalaMin;
-
-        // Actualizar la fuerza inicial en el Canvas
-        GameManager.FuerzaBala(fuerzaActual);
     }
 
-    private void OnMouseUp()
+    // Esta función se llama cuando el botón es liberado (dispara la bala)
+    public void OnPointerUp(PointerEventData eventData)
     {
         // Detener la carga
         cargando = false;
@@ -102,6 +109,12 @@ public class BotonVerde : MonoBehaviour
             canonRenderer.material.color = colorOriginal;
         }
 
+        // Disparar la bala
+        DispararBala();
+    }
+
+    private void DispararBala()
+    {
         // Disparar la bala
         if (posicionInicial != null && cruceta != null && balaPrefab != null && canon != null)
         {
@@ -121,9 +134,9 @@ public class BotonVerde : MonoBehaviour
 
         // Incrementar el contador de balas
         GameManager.IncNumBalas();
-
     }
 }
+
 
 
 

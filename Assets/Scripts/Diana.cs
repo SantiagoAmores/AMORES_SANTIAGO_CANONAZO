@@ -6,16 +6,16 @@ public class Diana : MonoBehaviour
 {
     // Tag para identificar las balas
     public string tagBala = "Bala";
-    int contador = 0;
-    bool rotarDiana = false;
-
-    // Lista de posiciones para reaparecer
-    public Transform[] posicionesReaparicion; // Asigna Empty en el Inspector
 
     // Prefab de la diana para reaparecer
     public GameObject dianaPrefab;
 
-    // Si el Collider está configurado como "Trigger"
+    // Límites de la pared en el plano X e Y
+    public float limiteXMin = -26f;
+    public float limiteXMax = 26f;   
+    public float limiteYMin = 4f;  
+    public float limiteYMax = 18f;
+
     private void OnTriggerEnter(Collider collision)
     {
         // Comprobar si el objeto que entra en el trigger tiene el tag de bala
@@ -24,49 +24,35 @@ public class Diana : MonoBehaviour
             Destroy(collision.gameObject); // Destruir la bala
             GameManager.DecNumBalas();
 
-            if (contador == 0)
-            {
-                GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-                contador++;
-            }
-            else if (contador == 1)
-            {
-                rotarDiana = true;
-                contador++;
-            }
-            else if (contador == 2)
-            {
-                // Reaparecer la diana en una posición aleatoria
+                // Reaparecer la diana en una posición aleatoria en el plano X,Y
                 ReaparecerDiana();
                 Destroy(gameObject); // Destruir la diana actual
 
                 GameManager.IncNumDianas();
-
-            }
+    
         }
     }
 
     private void Update()
     {
-        if (rotarDiana)
-        {
-            transform.Rotate(0, 0, (50 * Time.deltaTime));
-        }
+        // Sin ninguna rotación o cambio de color, no hace falta código aquí
     }
 
     private void ReaparecerDiana()
     {
-        // Verificar que existan posiciones en el array
-        if (posicionesReaparicion.Length > 0 && dianaPrefab != null)
+        // Verificar que el prefab de la diana no sea null
+        if (dianaPrefab != null)
         {
-            // Elegir una posición aleatoria del array
-            int indiceAleatorio = Random.Range(0, posicionesReaparicion.Length);
-            Transform posicionSeleccionada = posicionesReaparicion[indiceAleatorio];
+            // Elegir una posición aleatoria dentro de los límites en el plano X e Y
+            float posX = Random.Range(limiteXMin, limiteXMax);
+            float posY = Random.Range(limiteYMin, limiteYMax);
 
-            // Instanciar una nueva diana en la posición seleccionada
-            Instantiate(dianaPrefab, posicionSeleccionada.position, posicionSeleccionada.rotation);
+            // Establecer una posición en el plano X,Y
+            Vector3 nuevaPosicion = new Vector3(posX, posY, transform.position.z);
+
+            // Instanciar la nueva diana en la posición aleatoria
+            Instantiate(dianaPrefab, nuevaPosicion, Quaternion.identity);
         }
     }
 }
-
 
