@@ -24,12 +24,15 @@ public class Diana : MonoBehaviour
             Destroy(collision.gameObject); // Destruir la bala
             GameManager.DecNumBalas();
 
-                // Reaparecer la diana en una posición aleatoria en el plano X,Y
-                ReaparecerDiana();
-                Destroy(gameObject); // Destruir la diana actual
+            // Añadir 5 segundos al temporizador
+            GameManager.IncTiempo(3f);
 
-                GameManager.IncNumDianas();
-    
+            // Reaparecer la diana en una posición aleatoria en el plano X,Y
+            ReaparecerDiana();
+            Destroy(gameObject); // Destruir la diana actual
+
+            GameManager.IncNumDianas();
+
         }
     }
 
@@ -51,7 +54,11 @@ public class Diana : MonoBehaviour
             Vector3 nuevaPosicion = new Vector3(posX, posY, transform.position.z);
 
             // Instanciar la nueva diana en la posición aleatoria
-            Instantiate(dianaPrefab, nuevaPosicion, Quaternion.identity);
+
+            Vector3 eulerAngles = new Vector3(-90, 0, 0);
+            Quaternion rotation = Quaternion.Euler(eulerAngles);
+
+            Instantiate(dianaPrefab, nuevaPosicion, rotation);
         }
     }
 }

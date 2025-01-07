@@ -10,6 +10,7 @@ TagManager:
   - BotonVerde
   - BotonBlanco
   - Diana
+  - Boton
   layers:
   - Default
   - TransparentFX
