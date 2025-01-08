@@ -1,6 +1,6 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class Diana : MonoBehaviour
 {
@@ -12,19 +12,54 @@ public class Diana : MonoBehaviour
 
     // Límites de la pared en el plano X e Y
     public float limiteXMin = -26f;
-    public float limiteXMax = 26f;   
-    public float limiteYMin = 4f;  
+    public float limiteXMax = 26f;
+    public float limiteYMin = 4f;
     public float limiteYMax = 18f;
+
+    // Sonido de impacto
+    public AudioClip sonidoImpacto;
+    public AudioSource audioSource;
+
+    private float tiempoSinImpacto = 0f; // Tiempo que la diana ha estado sin recibir un impacto
+    private float tiempoMaximo = 5f;    // Tiempo máximo sin impacto antes de reaparecer
+
+    private void Start()
+    {
+        // Obtener el componente AudioSource del objeto
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    private void Update()
+    {
+        // Incrementar el tiempo sin impacto
+        tiempoSinImpacto += Time.deltaTime;
+
+        // Si el tiempo sin impacto supera el máximo, reaparecer y destruir la diana actual
+        if (tiempoSinImpacto >= tiempoMaximo)
+        {
+            ReaparecerDiana();
+            Destroy(gameObject);
+        }
+    }
 
     private void OnTriggerEnter(Collider collision)
     {
         // Comprobar si el objeto que entra en el trigger tiene el tag de bala
         if (collision.gameObject.CompareTag(tagBala))
         {
+            // Reiniciar el contador de tiempo sin impacto
+            tiempoSinImpacto = 0f;
+
+            // Reproducir el sonido de impacto
+            if (sonidoImpacto != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(sonidoImpacto);
+            }
+
             Destroy(collision.gameObject); // Destruir la bala
             GameManager.DecNumBalas();
 
-            // Añadir 5 segundos al temporizador
+            // Añadir 3 segundos al temporizador
             GameManager.IncTiempo(3f);
 
             // Reaparecer la diana en una posición aleatoria en el plano X,Y
@@ -32,13 +67,7 @@ public class Diana : MonoBehaviour
             Destroy(gameObject); // Destruir la diana actual
 
             GameManager.IncNumDianas();
-
         }
-    }
-
-    private void Update()
-    {
-        // Sin ninguna rotación o cambio de color, no hace falta código aquí
     }
 
     private void ReaparecerDiana()
@@ -62,4 +91,5 @@ public class Diana : MonoBehaviour
         }
     }
 }
+
 

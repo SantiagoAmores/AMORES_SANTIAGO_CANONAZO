@@ -18,6 +18,9 @@ public class BotonVerde : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public float tiempoCargaMax = 2f;      // Tiempo máximo para cargar la fuerza
     public float distanciaCambioColor = 5f; // Distancia mínima para cambiar el color del cañón
 
+    public AudioClip sonidoDisparo;        // Sonido al disparar
+    private AudioSource audioSource;       // Componente AudioSource
+
     private float tiempoInicio;            // Tiempo al iniciar la carga
     private float tiempoCargando;          // Tiempo actual acumulado
     private float fuerzaActual;            // Fuerza calculada
@@ -30,6 +33,14 @@ public class BotonVerde : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         if (canonRenderer != null)
         {
             colorOriginal = canonRenderer.material.color;
+        }
+
+        // Obtener el componente AudioSource del objeto
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            // Si no tiene un AudioSource, añadirlo
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
@@ -129,6 +140,12 @@ public class BotonVerde : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             if (rb != null)
             {
                 rb.AddForce(direccionDisparo * fuerzaActual, ForceMode.Impulse);
+            }
+
+            // Reproducir el sonido de disparo
+            if (sonidoDisparo != null)
+            {
+                audioSource.PlayOneShot(sonidoDisparo);
             }
         }
 

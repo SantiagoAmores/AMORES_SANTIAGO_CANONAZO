@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textoVictoria;
     public TextMeshProUGUI textoDerrota;
 
+    // Clips de audio para victoria y derrota
+    public AudioClip sonidoVictoria;
+    public AudioClip sonidoDerrota;
+    private AudioSource audioSource;
+
     void Start()
     {
         numBalasText = GameObject.Find("TextoBalas");
@@ -64,6 +69,9 @@ public class GameManager : MonoBehaviour
 
         derrota.SetActive(false);
         victoria.SetActive(false);
+
+        // Inicializar el AudioSource
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -170,17 +178,29 @@ public class GameManager : MonoBehaviour
         }
 
         // Comprobar condiciones para victoria o derrota
-        if (numDianas >= 5 && precision > 50f)
+        if (numDianas >= 2 && precision >= 50f)
         {
             victoria.SetActive(true);
             textoVictoria.text = "¡VICTORIA!";
             animacionFinPartida.SetTrigger("IniciarVictoria");
+
+            // Reproducir sonido de victoria
+            if (sonidoVictoria != null)
+            {
+                audioSource.PlayOneShot(sonidoVictoria);
+            }
         }
         else
         {
             derrota.SetActive(true);
             textoDerrota.text = "DERROTA...";
             animacionFinPartida.SetTrigger("IniciarDerrota");
+
+            // Reproducir sonido de derrota
+            if (sonidoDerrota != null)
+            {
+                audioSource.PlayOneShot(sonidoDerrota);
+            }
         }
 
         // Mostrar estadísticas en el texto del temporizador
@@ -217,5 +237,5 @@ public class GameManager : MonoBehaviour
             mirilla.SetActive(false);
         }
     }
-    }
+}
 

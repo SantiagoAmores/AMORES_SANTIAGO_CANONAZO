@@ -103,6 +103,7 @@ MonoBehaviour:
   limiteXMax: 26
   limiteYMin: 4
   limiteYMax: 18
+  sonidoImpacto: {fileID: 8300000, guid: e4b2c8859f712b34a95a757066bd0b6a, type: 3}
 --- !u!136 &4081550427464726644
 CapsuleCollider:
   m_ObjectHideFlags: 0

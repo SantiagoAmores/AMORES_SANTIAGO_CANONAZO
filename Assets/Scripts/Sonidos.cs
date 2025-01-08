@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Menu : MonoBehaviour
+public class Sonidos : MonoBehaviour
 {
-    public GameObject menuPrincipal; // Panel del menú principal
-    public GameObject menuCreditos; // Panel del menú créditos
-
     public AudioSource audioSource;  // Componente AudioSource para reproducir sonidos
     public AudioClip sonidoBoton;    // Sonido que se reproducirá al pulsar botones
 
     public void IniciarJuego()
     {
         ReproducirSonido(); // Reproducir el sonido al pulsar el botón
-        SceneManager.LoadScene("SampleScene"); // Cargar la escena principal
     }
 
     public void ReproducirSonido()
@@ -24,12 +20,5 @@ public class Menu : MonoBehaviour
         {
             audioSource.PlayOneShot(sonidoBoton); // Reproduce el sonido
         }
-    }
-
-    void Start()
-    {
-        // Configurar los objetos al inicio del juego
-        menuPrincipal.SetActive(true);   // Mostrar menú principal
-        menuCreditos.SetActive(false);  // Ocultar menú créditos
     }
 }
