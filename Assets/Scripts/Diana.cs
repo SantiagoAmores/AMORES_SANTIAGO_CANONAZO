@@ -25,8 +25,7 @@ public class Diana : MonoBehaviour
 
     private void Start()
     {
-        // Obtener el componente AudioSource del objeto
-        audioSource = GetComponent<AudioSource>();
+        
     }
 
     private void Update()
@@ -50,9 +49,13 @@ public class Diana : MonoBehaviour
             // Reiniciar el contador de tiempo sin impacto
             tiempoSinImpacto = 0f;
 
+            Debug.Log("sonidoimpacto" + sonidoImpacto);
+            Debug.Log("audioSource" + audioSource);
+
             // Reproducir el sonido de impacto
             if (sonidoImpacto != null && audioSource != null)
             {
+                Debug.Log("Reproducir sonido");
                 audioSource.PlayOneShot(sonidoImpacto);
             }
 
