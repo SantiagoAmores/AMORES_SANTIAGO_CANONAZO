@@ -3832,7 +3832,7 @@ PrefabInstance:
     - target: {fileID: 6069539697202391620, guid: 33aac6098c6fea54083bf52bb713bf25, type: 3}
       propertyPath: audioSource
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2037176607}
     - target: {fileID: 6069539697202391620, guid: 33aac6098c6fea54083bf52bb713bf25, type: 3}
       propertyPath: sonidoImpacto
       value: 

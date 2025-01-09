@@ -23,12 +23,6 @@ public class Diana : MonoBehaviour
     private float tiempoSinImpacto = 0f; // Tiempo que la diana ha estado sin recibir un impacto
     private float tiempoMaximo = 5f;    // Tiempo máximo sin impacto antes de reaparecer
 
-    private void Start()
-    {
-        // Obtener el componente AudioSource del objeto
-        audioSource = GetComponent<AudioSource>();
-    }
-
     private void Update()
     {
         // Incrementar el tiempo sin impacto
